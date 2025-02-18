@@ -64,14 +64,24 @@
 
     <script>
         const loginForm = document.getElementById('loginForm');
+
         loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+
             if (username === 'admin' && password === '1234') {
+                // Guarda el tipo de usuario
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userType', 'admin');
+                window.location.href = 'Pagina1.html';
+            } else if (username === 'guest' && password === '5678') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userType', 'guest');
                 window.location.href = 'Pagina1.html';
             } else {
-                alert('Usuario o contraseña incorrecta');
+                alert('Usuario o contraseña incorrectos');
             }
         });
     </script>

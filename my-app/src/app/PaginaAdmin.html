@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Pagina 1</title>
+    <title>Pagina Admin</title>
     <style>
         header {
             background: #052d7b;
@@ -36,11 +36,13 @@
         }
     </style>
     <script>
-        // Verifica si el usuario ha iniciado sesión
+        // Verifica si el usuario es admin
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
-            if (!isLoggedIn || isLoggedIn !== 'true') {
-                window.location.href = 'app.component.html';
+            const userType = localStorage.getItem('userType');
+
+            if (!isLoggedIn || isLoggedIn !== 'true' || userType !== 'admin') {
+                window.location.href = 'Pagina1.html';
             }
         };
     </script>
@@ -54,8 +56,8 @@
         </nav>
     </header>
     <main>
-        <h1>Pagina 1</h1>
-        <p>Contenido</p>
+        <h1>Pagina Admin</h1>
+        <p>Contenido exclusivo para administradores.</p>
     </main>
 </body>
 </html>
