@@ -34,15 +34,63 @@
             align-items: center;
             text-align: center;
         }
+        .pokemon-info {
+            margin-top: 20px;
+        }
+        .pokemon-info img {
+            width: 150px;
+            height: 150px;
+        }
     </style>
     <script>
-        // Verifica si el usuario ha iniciado sesión
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             if (!isLoggedIn || isLoggedIn !== 'true') {
                 window.location.href = 'app.component.html';
+            } else {
+                fetchPokemonData();
             }
         };
+        function fetchPokemonData() {
+            fetch('https://pokeapi.co/api/v2/pokemon/lucario')
+                .then(response => response.json())
+                .then(data => {
+                    displayPokemonData(data);
+                })
+        }
+        function displayPokemonData(pokemon) {
+            const main = document.querySelector('main');
+            const pokemonInfo = document.createElement('div');
+            pokemonInfo.className = 'pokemon-info';
+
+            const name = document.createElement('h2');
+            name.textContent = pokemon.name;
+
+            const image = document.createElement('img');
+            image.src = pokemon.sprites.front_default;
+            image.alt = pokemon.name;
+
+            const abilities = document.createElement('p');
+            abilities.textContent = 'Abilities: ' + pokemon.abilities.map(ability => ability.ability.name).join(', ');
+            const statsSection = document.createElement('div');
+            statsSection.className = 'stats';
+            const statsTitle = document.createElement('h3');
+            statsTitle.textContent = 'Stats:';
+            statsSection.appendChild(statsTitle);
+
+            pokemon.stats.forEach(stat => {
+                const statText = document.createElement('p');
+                statText.textContent = `${stat.stat.name}: ${stat.base_stat}`;
+                statsSection.appendChild(statText);
+            });
+
+            pokemonInfo.appendChild(name);
+            pokemonInfo.appendChild(image);
+            pokemonInfo.appendChild(abilities);
+            pokemonInfo.appendChild(statsSection);
+
+            main.appendChild(pokemonInfo);
+        }
     </script>
 </head>
 <body>
@@ -54,8 +102,7 @@
         </nav>
     </header>
     <main>
-        <h1>Pagina 1</h1>
-        <p>Contenido</p>
+        
     </main>
 </body>
 </html>
