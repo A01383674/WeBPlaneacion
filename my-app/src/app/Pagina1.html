@@ -30,36 +30,82 @@
             flex: 1; 
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
+            padding: 20px;
+        }
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
         .pokemon-info {
-            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
         .pokemon-info img {
             width: 150px;
             height: 150px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .search-bar button {
+            background: #03113d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background: #010b2c;
         }
     </style>
     <script>
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             if (!isLoggedIn || isLoggedIn !== 'true') {
-                window.location.href = 'app.component.html';
+                window.location.href='app.component.html';
             } else {
-                fetchPokemonData();
+                fetchRandomPokemonData();
             }
         };
-        function fetchPokemonData() {
-            fetch('https://pokeapi.co/api/v2/pokemon/lucario')
+
+        function fetchRandomPokemonData() {
+            const main=document.querySelector('.pokemon-grid');
+            main.innerHTML=''; // Borrar todo
+            for (let i=0;i<5;i++) {
+                const randomPokemonId=Math.floor(Math.random()*1010)+1; // Random ID
+                fetchPokemonById(randomPokemonId);
+            }
+        }
+
+        function fetchPokemonById(pokemonId) {
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
                 .then(response => response.json())
                 .then(data => {
                     displayPokemonData(data);
                 })
+                .catch(error => {
+                    console.error('Error fetching Pokémon data:',error);
+                });
         }
+
         function displayPokemonData(pokemon) {
-            const main = document.querySelector('main');
+            const main = document.querySelector('.pokemon-grid');
             const pokemonInfo = document.createElement('div');
             pokemonInfo.className = 'pokemon-info';
 
@@ -72,6 +118,7 @@
 
             const abilities = document.createElement('p');
             abilities.textContent = 'Abilities: ' + pokemon.abilities.map(ability => ability.ability.name).join(', ');
+
             const statsSection = document.createElement('div');
             statsSection.className = 'stats';
             const statsTitle = document.createElement('h3');
@@ -83,13 +130,26 @@
                 statText.textContent = `${stat.stat.name}: ${stat.base_stat}`;
                 statsSection.appendChild(statText);
             });
-
             pokemonInfo.appendChild(name);
             pokemonInfo.appendChild(image);
             pokemonInfo.appendChild(abilities);
             pokemonInfo.appendChild(statsSection);
-
             main.appendChild(pokemonInfo);
+        }
+
+        function signOut() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userType');
+            window.location.href = 'app.component.html';
+        }
+
+        function searchPokemon() {
+            const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (searchInput) {
+                const main = document.querySelector('.pokemon-grid');
+                main.innerHTML= '';
+                fetchPokemonById(searchInput);
+            }
         }
     </script>
 </head>
@@ -99,10 +159,18 @@
             <button onclick="window.location.href='Pagina1.html'">Página 1</button>
             <button onclick="window.location.href='Pagina2.html'">Página 2</button>
             <button onclick="window.location.href='PaginaAdmin.html'">Página Admin</button>
+            <button onclick="signOut()">Cerrar Sesion</button>
         </nav>
     </header>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button onclick="fetchRandomPokemonData()">Mostrar nuevos</button>
+    </div>
     <main>
-        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder=" ">
+            <button onclick="searchPokemon()">Search</button>
+        </div>
+        <div class="pokemon-grid"></div>
     </main>
 </body>
 </html>
