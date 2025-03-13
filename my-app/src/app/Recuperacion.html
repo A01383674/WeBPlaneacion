@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Recuperación de Contraseña</title>
+    <style>
+        body { /* fondo */
+            font-family: sans-serif;
+            background: #191919dd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .recuperacion-box { /* caja de recuperación */
+            background: #1e2024;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .logo { /* logo */
+            width: 150px;
+            height: 40px;
+        }
+        h2 { /* texto header caja */
+            margin-bottom: 20px;
+            color: white;
+        }
+        input[type="email"] {
+            width: 90%; 
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #2c2f33; 
+            color: white;
+        }
+        input[type="submit"] { /* botón de recuperación */
+            width: 90%; 
+            padding: 10px;
+            background: #03113d;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background: #010b2c;
+        }
+        .regresar-button {
+            width: 90%; 
+            background: #4CAF50; /* Verde para el botón de regresar */
+            padding: 10px; 
+            color: white;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .regresar-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="recuperacion-box">
+        <img src="logovantage.jpg" alt="Logo Vantage" class="logo">
+        <h2>Recuperación de contraseña</h2>
+        <form id="recuperacionForm">
+            <input type="email" placeholder="Correo electrónico" required>
+            <input type="submit" value="Recuperar contraseña">
+        </form>
+        <a href="app.component.html" class="regresar-button">Regresar</a>
+    </div>
+</body>
+</html>

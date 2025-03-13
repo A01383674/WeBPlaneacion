@@ -49,6 +49,28 @@
         input[type="submit"]:hover {
             background: #010b2c;
         }
+        .register-button {
+            width: 90%; 
+            background: #4CAF50;
+            padding: 3px; 
+            color: white;
+            border: none;
+            border-radius: 9px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .register-button:hover {
+            background: #45a049; 
+        }
+        .forgot-password {
+            margin-top: 10px;
+            color: #ccc;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .forgot-password:hover {
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -60,6 +82,8 @@
             <input type="password" id="password" placeholder="Password" required>
             <input type="submit" value="Login">
         </form>
+        <button class="register-button" onclick="window.location.href='Registro.html'">No tienes cuenta?</button>
+        <div class="forgot-password" onclick="window.location.href='Recuperacion.html'">Olvidaste la contraseña?</div>
     </div>
 
     <script>
@@ -67,7 +91,6 @@
 
         loginForm.addEventListener('submit', function(event) {
             event.preventDefault();
-
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
