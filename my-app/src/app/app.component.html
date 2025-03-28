@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { /* fondo */
+        body {
             font-family: sans-serif;
             background: #191919dd;
             display: flex;
@@ -12,61 +13,68 @@
             height: 100vh;
             margin: 0;
         }
-        .login-box { /* caja login */
+        .login-box {
             background: #1e2024;
-            padding: 20px;
+            padding: 10px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
             text-align: center;
         }
-        .logo { /* logo */
+        .logo {
             width: 150px;
-            height: 40px;
+            height: 45px;
         }
-        h2 { /* texto header caja */
+        h2 {
             margin-bottom: 20px;
             color: white;
         }
-        input[type="user"], input[type="password"] {
-            width: 90%; 
+        input[type="text"], 
+        input[type="password"],
+        input[type="submit"] {
+            width: 90%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            margin: 2% 0;
             border-radius: 4px;
-            background: #2c2f33; 
+            font-size: 14px;
+        }
+        input[type="text"], 
+        input[type="password"] {
+            border: 1px solid #444;
+            background: #2c2f33;
             color: white;
         }
-        input[type="submit"] { /* boton enter*/
-            width: 90%; 
-            padding: 10px;
+        input[type="submit"] {
             background: #03113d;
             color: white;
             border: none;
-            border-radius: 9px;
             cursor: pointer;
+            transition: background 0.3s;
         }
         input[type="submit"]:hover {
             background: #010b2c;
         }
         .register-button {
-            width: 90%; 
+            width: 90%;
+            padding: 10px;
             background: #4CAF50;
-            padding: 3px; 
             color: white;
             border: none;
-            border-radius: 9px;
+            border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            font-size: 14px;
+            transition: background 0.3s;
         }
         .register-button:hover {
-            background: #45a049; 
+            background: #45a049;
         }
         .forgot-password {
             margin-top: 10px;
             color: #ccc;
             text-decoration: underline;
             cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
         }
         .forgot-password:hover {
             color: #fff;
@@ -78,7 +86,7 @@
         <img src="logovantage.jpg" alt="Logo Vantage" class="logo">
         <h2>Login</h2>
         <form id="loginForm">
-            <input type="user" id="username" placeholder="Username" required>
+            <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
             <input type="submit" value="Login">
         </form>
@@ -87,24 +95,64 @@
     </div>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const supabaseUrl = 'https://umdaanogfdvsbdzxtkjm.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtZGFhbm9nZmR2c2Jkenh0a2ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMTI4MjUsImV4cCI6MjA1ODY4ODgyNX0.WjMBDBfAF6c1SLVj-hlydFYtwjUdjO9Kqgigm8Jn73Y';
+                window.supabase = supabase.createClient(supabaseUrl, supabaseKey);  
+                console.log('Supabase inicializado correctamente');
+                const loginForm = document.getElementById('loginForm');
+                
+                loginForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    console.log('Formulario enviado');
+                    
+                    const username = document.getElementById('username').value.trim();
+                    const password = document.getElementById('password').value.trim();
 
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+                    if (!username || !password) {
+                        alert('Por favor ingresa usuario y contraseña');
+                        return;
+                    }
 
-            if (username === 'admin' && password === '1234') {
-                // Guarda el tipo de usuario
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userType', 'admin');
-                window.location.href = 'Pagina1.html';
-            } else if (username === 'guest' && password === '5678') {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userType', 'guest');
-                window.location.href = 'Pagina1.html';
-            } else {
-                alert('Usuario o contraseña incorrectos');
+                    try {
+                        console.log('Intentando autenticar:', username);
+                        
+                        const { data, error } = await window.supabase
+                            .from('People')
+                            .select('*')
+                            .eq('Username', username)
+                            .eq('Password', password)
+                            .single();
+
+                        console.log('Respuesta de Supabase:', { data, error });
+
+                        if (error) {
+                            console.error('Error de Supabase:', error);
+                            alert('Error al conectar con el servidor: ' + error.message);
+                            return;
+                        }
+                        
+                        if (data) {
+                            console.log('Usuario autenticado:', data);
+                            localStorage.setItem('isLoggedIn', 'true');
+                            localStorage.setItem('userType', data.user_type || 'user');
+                            localStorage.setItem('userId', data.id);
+                            localStorage.setItem('userName', data.username);
+                            
+                            alert('¡Inicio de sesión exitoso! Redirigiendo...');
+                            window.location.href = 'Pagina1.html';
+                        } else {
+                            alert('Usuario o contraseña incorrectos');
+                        }
+                    } catch (error) {
+                        console.error('Error de autenticación:', error);
+                        alert('Error al iniciar sesión: ' + error.message);
+                    }
+                });   
+            } catch (error) {
+                console.error('Error al inicializar Supabase:', error);
+                alert('Error al cargar la aplicación. Por favor recarga la página.');
             }
         });
     </script>

@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { /* fondo */
+        body {
             font-family: sans-serif;
             background: #191919dd;
             display: flex;
@@ -12,7 +13,7 @@
             height: 100vh;
             margin: 0;
         }
-        .register-box { /* caja de registro */
+        .register-box {
             background: #1e2024;
             padding: 20px;
             border-radius: 6px;
@@ -20,69 +21,59 @@
             width: 300px;
             text-align: center;
         }
-        .logo { /* logo */
+        .logo {
             width: 150px;
             height: 40px;
         }
-        h2 { /* texto header caja */
+        h2 {
             margin-bottom: 20px;
             color: white;
         }
-        input[type="text"], input[type="email"], input[type="password"] {
+        input[type="text"], 
+        input[type="email"], 
+        input[type="password"],
+        input[type="date"] {
             width: 90%; 
             padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 1px solid #444;
             border-radius: 4px;
             background: #2c2f33; 
             color: white;
         }
-        input[type="date"], input[type="dob"]{
-            width: 90%; 
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #2c2f33; 
-            color: white;
-        }
-        input[type="submit"] { /* boton de registro */
-            width: 90%; 
-            padding: 10px;
-            background: #03113d;
-            color: white;
-            border: none;
-            border-radius: 9px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background: #010b2c;
-        }
-        .register-button {
-            width: 90%; 
-            background: #03113d;
-            padding: 10px; 
-            color: white;
-            border: none;
-            border-radius: 9px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .register-button:hover {
-            background: #010b2c; 
-        }
+        input[type="submit"],
+        .register-button,
         .login-button {
             width: 90%; 
-            background: #4CAF50;
-            padding: 10px; 
+            padding: 10px;
             color: white;
             border: none;
             border-radius: 9px;
             cursor: pointer;
             margin-top: 10px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        input[type="submit"],
+        .register-button {
+            background: #03113d;
+        }
+        input[type="submit"]:hover,
+        .register-button:hover {
+            background: #010b2c;
+        }
+        .login-button {
+            background: #4CAF50;
         }
         .login-button:hover {
             background: #45a049;
+        }
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: 10px;
+            display: none;
         }
     </style>
 </head>
@@ -91,16 +82,85 @@
         <img src="logovantage.jpg" alt="Logo Vantage" class="logo">
         <h2>Register</h2>
         <form id="registerForm">
-            <form id="registerForm">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-                <input type="date" id="dob" name="dob" required>
-            </form>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <div id="passwordError" class="error-message"></div>
+            <input type="date" id="dob" required>
+            <input type="submit" value="Register">
         </form>
-        <button class="register-button" onclick="window.location.href='app.component.html'">Register</button>
         <button class="login-button" onclick="window.location.href='app.component.html'">Back to Login</button>
     </div>
+
+    <script>
+        // Espera a que todo esté cargado
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Verifica que supabase está disponible
+                if (typeof supabase === 'undefined') {
+                    throw new Error('Supabase no se cargó correctamente');
+                }
+                
+                // Inicializa el cliente
+                const client = supabase.createClient(
+                    'https://umdaanogfdvsbdzxtkjm.supabase.co',
+                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtZGFhbm9nZmR2c2Jkenh0a2ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMTI4MjUsImV4cCI6MjA1ODY4ODgyNX0.WjMBDBfAF6c1SLVj-hlydFYtwjUdjO9Kqgigm8Jn73Y'
+                );
+                
+                console.log('Supabase inicializado:', client);
+
+                // Configura el formulario
+                const form = document.getElementById('registerForm');
+                const passwordError = document.getElementById('passwordError');
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    // Obtiene valores
+                    const username = document.getElementById('username').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    const dob = document.getElementById('dob').value;
+
+                    // Validación
+                    if (password !== confirmPassword) {
+                        passwordError.textContent = 'Las contraseñas no coinciden';
+                        return;
+                    } else {
+                        passwordError.textContent = '';
+                    }
+
+                    try {
+                        // Inserta en la base de datos
+                        const { data, error } = await client
+                            .from('People')
+                            .insert([{
+                                Username: username,
+                                Email: email,
+                                Password: password,
+                                Date_of_birth: dob,
+                                IsAdmin: false
+                            }])
+                            .select();
+
+                        if (error) throw error;
+                        
+                        alert('Registro exitoso!');
+                        window.location.href = 'app.component.html';
+                        
+                    } catch (error) {
+                        console.error('Error al registrar:', error);
+                        alert(`Error: ${error.message}`);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error de inicialización:', error);
+                alert(`Error crítico: ${error.message}. Recarga la página.`);
+            }
+        });
+    </script>
 </body>
 </html>
