@@ -94,37 +94,29 @@
     </div>
 
     <script>
-        // Espera a que todo esté cargado
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Verifica que supabase está disponible
                 if (typeof supabase === 'undefined') {
                     throw new Error('Supabase no se cargó correctamente');
                 }
-                
-                // Inicializa el cliente
                 const client = supabase.createClient(
                     'https://umdaanogfdvsbdzxtkjm.supabase.co',
                     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtZGFhbm9nZmR2c2Jkenh0a2ptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMxMTI4MjUsImV4cCI6MjA1ODY4ODgyNX0.WjMBDBfAF6c1SLVj-hlydFYtwjUdjO9Kqgigm8Jn73Y'
                 );
                 
                 console.log('Supabase inicializado:', client);
-
-                // Configura el formulario
                 const form = document.getElementById('registerForm');
                 const passwordError = document.getElementById('passwordError');
 
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    
-                    // Obtiene valores
+                
                     const username = document.getElementById('username').value.trim();
                     const email = document.getElementById('email').value.trim();
                     const password = document.getElementById('password').value;
                     const confirmPassword = document.getElementById('confirmPassword').value;
                     const dob = document.getElementById('dob').value;
 
-                    // Validación
                     if (password !== confirmPassword) {
                         passwordError.textContent = 'Las contraseñas no coinciden';
                         return;
