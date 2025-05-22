@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Habilidades - PathExplorer</title>
+    <style>
+        body {
+            background: #161f31;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #4a9ff5;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-container {
+            background: #1e2a47;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            margin-right: 100px;
+        }
+
+        .form-group2 {
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #a8c6f8;
+        }
+        
+        input[type="text"], 
+        select, 
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #3a4d6b;
+            border-radius: 4px;
+            background: #2a3a5a;
+            color: #ffffff;
+            font-size: 16px;
+        }
+        
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input {
+            margin-right: 8px;
+        }
+        
+        button {
+            background: #4a9ff5;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #3a8ce5;
+        }
+    </style>
+</head>
+<body>  
+    <header>
+        <h1>Registro de Habilidades</h1>
+    </header>
+    
+    <div class="form-container">
+        <form id="skillForm">
+            <div class="form-group">
+                <label for="skillType">Tipo de habilidad</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="technical" name="skillType" value="técnica" checked>
+                        <label for="technical">Técnica</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="personal" name="skillType" value="personal">
+                        <label for="personal">Personal</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="skillName">Nombre de la habilidad</label>
+                <input type="text" id="skillName" name="skillName" placeholder="Ej: Java,Python,C++..." required>
+            </div>
+            
+            <div class="form-group2">
+                <label for="skillDetails">Detalles de la habilidad</label>
+                <textarea id="skillDetails" name="skillDetails" placeholder="Escriba una breve descripción de tu habilidad, nivel de dominio, experiencia, etc." required></textarea>
+            </div>
+            
+            <button type="submit">Registrar Habilidad</button>
+        </form>
+    </div>
+</body>
+</html>

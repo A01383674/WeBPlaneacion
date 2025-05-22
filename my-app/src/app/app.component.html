@@ -117,7 +117,6 @@
 
                     try {
                         console.log('Intentando autenticar:', username);
-                        
                         const { data, error } = await window.supabase
                             .from('People')
                             .select('*')
@@ -125,8 +124,7 @@
                             .eq('Password', password)
                             .single();
 
-                        console.log('Respuesta de Supabase:', { data, error });
-
+                        console.log('Error:', { data, error });
                         if (error) {
                             console.error('Error de Supabase:', error);
                             alert('Error al conectar con el servidor: ' + error.message);
