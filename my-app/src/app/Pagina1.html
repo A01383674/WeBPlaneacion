@@ -11,7 +11,7 @@
         }
         body {
             font-family: sans-serif;
-            background: #ffffffdd;
+            background: #cccccc; /* Cambiado a tono gris */
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -45,6 +45,7 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
+            background: #ffffff; /* Fondo blanco para las cartas */
         }
         .pokemon-info img {
             width: 150px;
@@ -74,6 +75,7 @@
             background: #010b2c;
         }
     </style>
+</head>
     <script>
         window.onload = function() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -87,7 +89,7 @@
         function fetchRandomPokemonData() {
             const main=document.querySelector('.pokemon-grid');
             main.innerHTML=''; // Borrar todo
-            for (let i=0;i<5;i++) {
+            for (let i=0;i<8;i++) {
                 const randomPokemonId=Math.floor(Math.random()*1010)+1; // Random ID
                 fetchPokemonById(randomPokemonId);
             }
